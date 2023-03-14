@@ -46,6 +46,16 @@ def gpt3_completion(prompt, engine='text-davinci-002', temp=0.6, top_p=1.0, toke
             sleep(1)
 
 
+def gpt3_embedding(content, engine='text-similarity-ada-001'):
+    response = openai.Embedding.create(input=content,engine=engine)
+    vector = response['data'][0]['embedding']  # this is a normal list
+    save_gpt3_log(content, str(vector))
+    return vector
+
+def similarity(v1, v2):  # return dot product of two vectors
+    return np.dot(v1, v2)
+
+
 if __name__ == '__main__':
     alltext = open_file('input.txt')
     chunks = textwrap.wrap(alltext, 2000)
