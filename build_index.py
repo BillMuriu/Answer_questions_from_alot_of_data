@@ -8,16 +8,17 @@ def open_file(filepath):
         return infile.read()
 
 
+openai.api_key = open_file('api_key.txt')
+
 def gpt3_embedding(content, engine='text-similarity-ada-001'):
     response = openai.Embedding.create(input=content,engine=engine)
     vector = response['data'][0]['embedding']  # this is a normal list
-    save_gpt3_log(content, str(vector))
     return vector
 
 
 if __name__ == '__main__':
     alltext = open_file('input.txt')
-    chunks = textwrap.wrap(alltext, 2000)
+    chunks = textwrap.wrap(alltext, 4000)
     result = list()
     count = 0
     for chunk in chunks:
