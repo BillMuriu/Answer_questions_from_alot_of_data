@@ -1,6 +1,7 @@
 import openai
 import os
 from time import time,sleep
+import json
 import textwrap
 import re
 
@@ -95,5 +96,6 @@ if __name__ == '__main__':
     count = 0
     for chunk in chunks:
         embedding = gpt3_embedding(chunk.encode(encoding='ASCII',errors='ignore').decode())
-        result.append()
-    save_file('\n\n'.join(result), 'output_%s.txt' % time())
+        result.append({'content': chunk, 'vector': embedding})
+    with open('index.json', 'w', encoding='utf-8') as outfile:
+        json.dump(result, outfile, indent=2)
