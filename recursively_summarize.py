@@ -77,18 +77,6 @@ def search_index(text, nexusindex, count=5, olderthan=None):
         return results
     
 
-def build_index():
-    files = os.listdir('nexus/')
-    changes = False
-    for file in files:
-        if file_exists(file, nexusindex):
-            continue
-        changes = True
-        vector = gpt3_embedding(read_file(memorydir+file))
-        nexusindex.append({'filename':file, 'vector': vector})
-    return nexusindex
-    
-
 if __name__ == '__main__':
     alltext = open_file('input.txt')
     chunks = textwrap.wrap(alltext, 2000)
@@ -97,5 +85,5 @@ if __name__ == '__main__':
     for chunk in chunks:
         embedding = gpt3_embedding(chunk.encode(encoding='ASCII',errors='ignore').decode())
         result.append({'content': chunk, 'vector': embedding})
-    with open('index.json', 'w', encoding='utf-8') as outfile:
+    with open('index.json', 'w') as outfile:
         json.dump(result, outfile, indent=2)
