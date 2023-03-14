@@ -54,27 +54,6 @@ def gpt3_embedding(content, engine='text-similarity-ada-001'):
 def similarity(v1, v2):  # return dot product of two vectors
     return np.dot(v1, v2)
 
-
-def search_index(text, nexusindex, count=5, olderthan=None):
-    vector = gpt3_embedding(text)
-    scores = list()
-    for i in nexusindex:
-        if i['vector'] == vector:  # this is identical, skip it
-            continue
-        if olderthan:
-            timestamp = get_timestamp(i['filename'])
-            if timestamp > olderthan:
-                continue
-        score = similarity(vector, i['vector'])
-        scores.append({'filename': i['filename'], 'score': score})
-    ordered = sorted(scores, key=lambda d: d['score'], reverse=True)
-    results = list()
-    for i in ordered:
-        results.append({'filename': i['filename'], 'score': i['score'], 'content': read_file('nexus/'+i['filename'])})
-    if len(results) > count:
-        return results[0:count]
-    else:
-        return results
     
 
 if __name__ == '__main__':
