@@ -2,7 +2,8 @@ import openai
 import json
 import numpy as np
 import textwrap
-
+import re
+from time import time, sleep
 
 def open_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as infile:
@@ -29,8 +30,7 @@ def search_index(text, data, count=10):
         score = similarity(vector, i['vector'])
         scores.append({'content': i['content'], 'score': score})
     ordered = sorted(scores, key=lambda d: d['score'], reverse=True)
-    results = list()
-    return results[0:count]
+    return ordered[0:count]
 
 
 def gpt3_completion(prompt, engine='text-davinci-002', temp=0.6, top_p=1.0, tokens=2000, freq_pen=0.25, pres_pen=0.0, stop=['<<END>>']):
@@ -82,3 +82,5 @@ if __name__ == '__main__':
         for chunk in chunks:
             prompt = open_file('prompt_answer.txt').replace('<<PASSAGE>>', result['content'])
             summary = gpt3_completion(prompt)
+            final.append(summary)
+        print('\n\n =======\n\n', '\n\n'.join(final))
