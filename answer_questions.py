@@ -1,6 +1,7 @@
 import openai
 import json
 import numpy as np
+import textwrap
 
 
 def open_file(filepath):
@@ -68,3 +69,16 @@ if __name__ == '__main__':
         query = input('Enter your question here:')
         #print(query)
         results = search_index(query, data)
+        answers = list()
+        # answer the same quetsion for all the results
+        for result in results:
+            prompt = open_file('prompt_answer.txt').replace('<<PASSAGE>>', result['content'])
+            answer = gpt3_completion(prompt)
+            print('\n\n', answer)
+            answers.append(answer)
+        #summarize the answers
+        all_answers = '\n\n'.join(answers)
+        chunks = textwrap.wrap(all_answers, 10000)
+        for chunk in chunks:
+            prompt = open_file('prompt_answer.txt').replace('<<PASSAGE>>', result['content'])
+            summary = gpt3_completion(prompt)
