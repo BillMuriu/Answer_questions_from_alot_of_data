@@ -76,7 +76,7 @@ def search_index(text, nexusindex, count=5, olderthan=None):
         return results
     
 
-def update_index(nexusindex):
+def build_index():
     files = os.listdir('nexus/')
     changes = False
     for file in files:
@@ -95,8 +95,9 @@ if __name__ == '__main__':
     count = 0
     for chunk in chunks:
         count = count + 1
-        prompt = open_file('prompt.txt').replace('<<SUMMARY>>', chunk)
+        # prompt = open_file('prompt.txt').replace('<<SUMMARY>>', chunk)
         prompt = prompt.encode(encoding='ASCII',errors='ignore').decode()
+        embedding = gpt3_embedding(chunk.encode(encoding='ASCII',errors='ignore').decode())
         summary = gpt3_completion(prompt)
         print('\n\n\n', count, 'of', len(chunks), ' - ', summary)
         result.append(summary)
