@@ -1,4 +1,5 @@
 import openai
+import numpy as np
 import json
 import textwrap
 
@@ -8,7 +9,7 @@ def open_file(filepath):
         return infile.read()
 
 
-openai.api_key = open_file('api_key.txt')
+
 
 def gpt3_embedding(content, engine='text-similarity-ada-001'):
     response = openai.Embedding.create(input=content,engine=engine)
@@ -20,9 +21,10 @@ if __name__ == '__main__':
     alltext = open_file('input.txt')
     chunks = textwrap.wrap(alltext, 4000)
     result = list()
-    count = 0
     for chunk in chunks:
-        embedding = gpt3_embedding(chunk.encode(encoding='ASCII',errors='ignore').decode())
-        result.append({'content': chunk, 'vector': embedding})
+        embedding = gpt3_embedding(chunk.encode(encoding='utf-8', errors='ignore').decode())
+        info = {'content': chunk, 'vector': embedding}
+        print(info, '\n\n\n')
+        result.append(info)
     with open('index.json', 'w') as outfile:
         json.dump(result, outfile, indent=2)
