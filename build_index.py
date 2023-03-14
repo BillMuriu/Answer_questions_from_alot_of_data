@@ -1,3 +1,6 @@
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
 import openai
 import numpy as np
 import json
@@ -9,7 +12,7 @@ def open_file(filepath):
         return infile.read()
 
 
-
+# openai.api_key = open_file('openaiapikey.txt')
 
 def gpt3_embedding(content, engine='text-similarity-ada-001'):
     response = openai.Embedding.create(input=content,engine=engine)
@@ -24,7 +27,7 @@ if __name__ == '__main__':
     for chunk in chunks:
         embedding = gpt3_embedding(chunk.encode(encoding='utf-8', errors='ignore').decode())
         info = {'content': chunk, 'vector': embedding}
-        print(info, '\n\n\n')
+        print(info, '\n\n\n'.encode(encoding='utf-8', errors='ignore').decode())
         result.append(info)
     with open('index.json', 'w') as outfile:
         json.dump(result, outfile, indent=2)
