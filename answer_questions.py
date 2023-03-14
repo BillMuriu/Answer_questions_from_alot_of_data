@@ -21,26 +21,15 @@ def similarity(v1, v2):  # return dot product of two vectors
     return np.dot(v1, v2)
 
 
-def search_index(text, nexusindex, count=5, olderthan=None):
+def search_index(text, data, count=10):
     vector = gpt3_embedding(text)
     scores = list()
-    for i in nexusindex:
-        if i['vector'] == vector:  # this is identical, skip it
-            continue
-        if olderthan:
-            timestamp = get_timestamp(i['filename'])
-            if timestamp > olderthan:
-                continue
+    for i in data:
         score = similarity(vector, i['vector'])
-        scores.append({'filename': i['filename'], 'score': score})
+        scores.append({'content': i['content'], 'score': score})
     ordered = sorted(scores, key=lambda d: d['score'], reverse=True)
     results = list()
-    for i in ordered:
-        results.append({'filename': i['filename'], 'score': i['score'], 'content': read_file('nexus/'+i['filename'])})
-    if len(results) > count:
-        return results[0:count]
-    else:
-        return results
+    return results[0:count]
 
 
 
@@ -51,4 +40,4 @@ if __name__ == '__main__':
     while True:
         query = input('Enter your question here:')
         #print(query)
-        results = search_index(query)
+        results = search_index(query, data)
