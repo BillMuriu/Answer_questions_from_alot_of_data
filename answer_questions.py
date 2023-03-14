@@ -79,6 +79,7 @@ if __name__ == '__main__':
         #summarize the answers
         all_answers = '\n\n'.join(answers)
         chunks = textwrap.wrap(all_answers, 10000)
+        final = list()
         for chunk in chunks:
             prompt = open_file('prompt_answer.txt').replace('<<PASSAGE>>', result['content'])
             summary = gpt3_completion(prompt)
