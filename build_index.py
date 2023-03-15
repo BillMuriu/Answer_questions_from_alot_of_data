@@ -12,7 +12,7 @@ def open_file(filepath):
         return infile.read()
 
 
-# openai.api_key = open_file('openaiapikey.txt')
+openai.api_key = open_file('openaiapikey.txt')
 
 def gpt3_embedding(content, engine='text-similarity-ada-001'):
     response = openai.Embedding.create(input=content,engine=engine)

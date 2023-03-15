@@ -1,3 +1,6 @@
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
 import openai
 import json
 import numpy as np
@@ -6,11 +9,11 @@ import re
 from time import time, sleep
 
 def open_file(filepath):
-    with open(filepath, 'r', encoding='utf-8') as infile:
+    with open(filepath, 'r') as infile:
         return infile.read()
     
 
-# openai.api_key = open_file('openaiapikey.txt')
+openai.api_key = open_file('openaiapikey.txt')
 
 
 def gpt3_embedding(content, engine='text-similarity-ada-001'):
@@ -72,7 +75,7 @@ if __name__ == '__main__':
         answers = list()
         # answer the same quetsion for all the results
         for result in results:
-            prompt = open_file('prompt_answer.txt').replace('<<PASSAGE>>', result['content'])
+            prompt = open_file('prompt_answer.txt').replace('<<PASSAGE>>', result['content']).replace('<<QUERY>>', query)
             answer = gpt3_completion(prompt)
             print('\n\n', answer)
             answers.append(answer)
@@ -81,7 +84,7 @@ if __name__ == '__main__':
         chunks = textwrap.wrap(all_answers, 10000)
         final = list()
         for chunk in chunks:
-            prompt = open_file('prompt_answer.txt').replace('<<PASSAGE>>', result['content'])
+            prompt = open_file('prompt_summary.txt').replace('<<SUMMARY>>', chunk)
             summary = gpt3_completion(prompt)
             final.append(summary)
         print('\n\n =======\n\n', '\n\n'.join(final))

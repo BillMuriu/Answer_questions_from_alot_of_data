@@ -1,7 +1,7 @@
-Use the folloeing passage to give a detailed answer to the question:
+Use the following passage to give a detailed answer to the question:
 
 
-QUESTION: Why did the courts decide to allow states to ban abortion?
+QUESTION: <<QUERY>>
 
 
 PASSAGE: <<PASSAGE>>
