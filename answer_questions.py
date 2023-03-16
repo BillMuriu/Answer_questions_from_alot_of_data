@@ -73,8 +73,7 @@ if __name__ == '__main__':
         results = search_index(query, data)
         answers = list()
         for result in results:
-            with open_file('prompt_answer.txt', encoding='utf-8') as f:
-                prompt = f.read().replace('<<PASSAGE>>', result['content']).replace('<<QUERY>>', query)
+            prompt = open_file('prompt_answer.txt', mode='r', encoding='utf-8').read().replace('<<PASSAGE>>', result['content']).replace('<<QUERY>>', query)
             answer = gpt3_completion(prompt.encode(encoding='utf-8', errors='ignore').decode())
             print('\n\n', answer)
             answers.append(answer)
