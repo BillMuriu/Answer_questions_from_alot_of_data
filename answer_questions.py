@@ -6,9 +6,16 @@ import re
 from time import time, sleep
 
 
-def open_file(filepath, encoding='utf-8'):
-    with open(filepath, 'r', encoding=encoding) as infile:
-        return infile.read()
+def open_file(filename, mode='r', encoding=None, errors='ignore'):
+    if encoding is not None:
+        return open(filename, mode, encoding=encoding, errors=errors)
+    else:
+        return open(filename, mode)
+
+
+# def open_file(filepath, encoding='utf-8'):
+#     with open(filepath, 'r', encoding=encoding) as infile:
+#         return infile.read()
     
 
 openai.api_key = open_file('openaiapikey.txt')
@@ -61,7 +68,7 @@ def gpt3_completion(prompt, engine='text-davinci-002', temp=0.6, top_p=1.0, toke
             print('Error communicating with OpenAI:', oops)
             sleep(1)
 
-            
+
 if __name__ == '__main__':
     with open_file('index.json', encoding='utf-8') as infile:
         data = json.load(infile)
