@@ -5,8 +5,9 @@ import textwrap
 import re
 from time import time, sleep
 
-def open_file(filepath):
-    with open(filepath, 'r') as infile:
+
+def open_file(filepath, encoding='utf-8'):
+    with open(filepath, 'r', encoding=encoding) as infile:
         return infile.read()
     
 
