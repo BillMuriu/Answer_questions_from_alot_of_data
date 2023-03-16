@@ -86,3 +86,24 @@ if __name__ == '__main__':
             summary = gpt3_completion(prompt)
             final.append(summary)
         print('\n\n =======\n\n', '\n\n'.join(final))
+
+if __name__ == '__main__':
+    with open_file('index.json', encoding='utf-8') as infile:
+        data = json.load(infile)
+    while True:
+        query = input('Enter your question here:')
+        results = search_index(query, data)
+        answers = list()
+        for result in results:
+            prompt = open_file('prompt_answer.txt', encoding='utf-8').replace('<<PASSAGE>>', result['content']).replace('<<QUERY>>', query)
+            answer = gpt3_completion(prompt.encode(encoding='utf-8', errors='ignore')).decode(encoding='utf-8', errors='ignore')
+            print('\n\n', answer)
+            answers.append(answer)
+        all_answers = '\n\n'.join(answers)
+        chunks = textwrap.wrap(all_answers, 10000)
+        final = list()
+        for chunk in chunks:
+            prompt = open_file('prompt_summary.txt', encoding='utf-8').replace('<<SUMMARY>>', chunk)
+            summary = gpt3_completion(prompt.encode(encoding='utf-8', errors='ignore')).decode(encoding='utf-8', errors='ignore')
+            final.append(summary)
+        print('\n\n =======\n\n', '\n\n'.join(final))
