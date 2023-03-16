@@ -10,7 +10,9 @@ def open_file(filename, mode='r', encoding=None, errors='ignore'):
     if encoding is not None:
         return open(filename, mode, encoding=encoding, errors=errors)
     else:
-        return open(filename, mode)
+        with open(filename, mode, encoding='utf-8') as infile:
+            return infile.read()
+    
 
 
 
@@ -81,7 +83,7 @@ if __name__ == '__main__':
         chunks = textwrap.wrap(all_answers, 10000)
         final = list()
         for chunk in chunks:
-            prompt = open_file('prompt_summary.txt', mode='r', encoding='utf-8').replace('<<SUMMARY>>', chunk)
+            prompt = open_file('prompt_summary.txt', mode='r', encoding='utf-8').read().replace('<<SUMMARY>>', chunk)
             summary = gpt3_completion(prompt.encode(encoding='utf-8', errors='ignore').decode())
             final.append(summary)
         print('\n\n =======\n\n', '\n\n'.join(final))
