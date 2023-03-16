@@ -96,7 +96,7 @@ if __name__ == '__main__':
         answers = list()
         for result in results:
             prompt = open_file('prompt_answer.txt', encoding='utf-8').replace('<<PASSAGE>>', result['content']).replace('<<QUERY>>', query)
-            answer = gpt3_completion(prompt.encode(encoding='utf-8', errors='ignore')).decode(encoding='utf-8', errors='ignore')
+            answer = gpt3_completion(prompt.encode(encoding='utf-8', errors='ignore').decode())
             print('\n\n', answer)
             answers.append(answer)
         all_answers = '\n\n'.join(answers)
@@ -104,6 +104,6 @@ if __name__ == '__main__':
         final = list()
         for chunk in chunks:
             prompt = open_file('prompt_summary.txt', encoding='utf-8').replace('<<SUMMARY>>', chunk)
-            summary = gpt3_completion(prompt.encode(encoding='utf-8', errors='ignore')).decode(encoding='utf-8', errors='ignore')
+            summary = gpt3_completion(prompt.encode(encoding='utf-8', errors='ignore').decode())
             final.append(summary)
         print('\n\n =======\n\n', '\n\n'.join(final))
