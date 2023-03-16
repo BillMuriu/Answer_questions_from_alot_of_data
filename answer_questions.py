@@ -13,12 +13,8 @@ def open_file(filename, mode='r', encoding=None, errors='ignore'):
         return open(filename, mode)
 
 
-# def open_file(filepath, encoding='utf-8'):
-#     with open(filepath, 'r', encoding=encoding) as infile:
-#         return infile.read()
-    
 
-openai.api_key = open_file('openaiapikey.txt')
+openai.api_key = ''
 
 
 def gpt3_embedding(content, engine='text-similarity-ada-001'):
@@ -77,7 +73,8 @@ if __name__ == '__main__':
         results = search_index(query, data)
         answers = list()
         for result in results:
-            prompt = open_file('prompt_answer.txt', encoding='utf-8').replace('<<PASSAGE>>', result['content']).replace('<<QUERY>>', query)
+            with open_file('prompt_answer.txt', encoding='utf-8') as f:
+                prompt = f.read().replace('<<PASSAGE>>', result['content']).replace('<<QUERY>>', query)
             answer = gpt3_completion(prompt.encode(encoding='utf-8', errors='ignore').decode())
             print('\n\n', answer)
             answers.append(answer)
@@ -85,7 +82,9 @@ if __name__ == '__main__':
         chunks = textwrap.wrap(all_answers, 10000)
         final = list()
         for chunk in chunks:
-            prompt = open_file('prompt_summary.txt', encoding='utf-8').replace('<<SUMMARY>>', chunk)
+            prompt = open_file('prompt_summary.txt', mode='r', encoding='utf-8').replace('<<SUMMARY>>', chunk)
             summary = gpt3_completion(prompt.encode(encoding='utf-8', errors='ignore').decode())
             final.append(summary)
         print('\n\n =======\n\n', '\n\n'.join(final))
+
+
