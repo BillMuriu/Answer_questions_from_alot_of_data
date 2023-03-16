@@ -61,32 +61,7 @@ def gpt3_completion(prompt, engine='text-davinci-002', temp=0.6, top_p=1.0, toke
             print('Error communicating with OpenAI:', oops)
             sleep(1)
 
-
-if __name__ == '__main__':
-    with open('index.json', 'r') as infile:
-        data = json.load(infile)
-        #print(data)
-    while True:
-        query = input('Enter your question here:')
-        #print(query)
-        results = search_index(query, data)
-        answers = list()
-        # answer the same quetsion for all the results
-        for result in results:
-            prompt = open_file('prompt_answer.txt').replace('<<PASSAGE>>', result['content']).replace('<<QUERY>>', query)
-            answer = gpt3_completion(prompt)
-            print('\n\n', answer)
-            answers.append(answer)
-        #summarize the answers
-        all_answers = '\n\n'.join(answers)
-        chunks = textwrap.wrap(all_answers, 10000)
-        final = list()
-        for chunk in chunks:
-            prompt = open_file('prompt_summary.txt').replace('<<SUMMARY>>', chunk)
-            summary = gpt3_completion(prompt)
-            final.append(summary)
-        print('\n\n =======\n\n', '\n\n'.join(final))
-
+            
 if __name__ == '__main__':
     with open_file('index.json', encoding='utf-8') as infile:
         data = json.load(infile)
